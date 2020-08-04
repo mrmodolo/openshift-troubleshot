@@ -12,7 +12,7 @@
 - sudo
 - openssh
 - bind-tools
-- tracepath
+- iputils
 
 ## Documentação
 
