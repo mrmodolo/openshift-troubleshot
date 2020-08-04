@@ -1,0 +1,201 @@
+def envTag = "${env.TARGET_ENVIRONMENT}"; 
+def namespace = "${env.NAMESPACE}";
+def replicas  = "${env.REPLICAS}";
+def reqMemoryLimit = "${env.REQ_MEMORY_LIMIT}";
+def memoryLimit = "${env.MEMORY_LIMIT}";
+def reqCpuLimit = "${env.REQ_CPU_LIMIT}";
+def cpuLimit = "${env.CPU_LIMIT}";
+
+def appName = "globo-ads-finance-contingency-api";
+
+def dcfile = "dc.yml";
+
+def configMapFile = "config-map-${envTag}.yml";
+
+def camelPrometheusConfigMap = "camel-prometheus-config";
+def camelPrometheusConfigMapFile = "${camelPrometheusConfigMap}.yml";
+
+pipeline {
+	agent {
+		label 'maven'
+	}
+
+	stages {
+		stage("Deploying") {
+			steps {
+				script {
+					stage('Checkout git config files project')
+					{
+						sh 'mkdir configfiles'
+				        dir('configfiles') { 
+							git branch: "master", credentialsId: 'continuous-deployment-vsts-git-pat', url: 'https://teceg.visualstudio.com/TECEG-Arq-Repositorios/_git/ConfigFiles';
+						}
+					}
+				
+					stage('General java config map deploy')
+					{
+						openshift.withCluster() {
+				            openshift.withProject(namespace) {
+								echo '>>>>>>>>>>Try to creating camel prometheus config map'
+								def prometheusConfigMap  = readFile("${WORKSPACE}/configfiles/java/${camelPrometheusConfigMapFile}");
+				            	if(openshift.selector("cm", "${camelPrometheusConfigMap}").exists()){
+									echo ">>>>>>Updating camel prometheus config map";
+									openshift.replace(prometheusConfigMap);
+								}else{
+									echo ">>>>>>Creating ConfigMap";
+									openshift.create(prometheusConfigMap);
+								}
+							}
+						}
+					}
+
+
+					stage ('Checking out source code') {
+						git branch: "${env.BRANCH_NAME}", credentialsId: 'continuous-deployment-vsts-git-pat', url: 'https://teceg.visualstudio.com/TECEG-Arq-Repositorios/_git/globo-ads-finance-contingency-api';
+					}
+
+					echo 'Building application'
+						
+					stage('Build java project and project image') {
+
+						sh "mvn -U --settings=$M2_SETTINGS clean package -Dmaven.test.skip=true";
+
+						openshift.withCluster() {
+							openshift.withProject(namespace) {
+
+								if (!openshift.selector("bc", "${appName}-bc").exists()) {
+									echo '>>>>>>>>>> Creating build config'
+									openshift.newBuild("--binary --name=${appName}-bc -l app=${appName} --to=${appName}:latest");
+								}
+								echo '>>>>>>>>>> Starting build config'
+								openshift.startBuild("${appName}-bc --from-dir=. --follow");
+							}
+						}
+					}					
+
+					stage("Tagging imaging with timestamp") {
+						openshift.withCluster() {
+							openshift.withProject(namespace) {
+								def currentDate = new Date().format('yyyyMMddhhmmss')
+					            echo ">>>>>>>>>>Tagging ${currentDate}"
+								openshift.tag("${appName}:latest ${appName}:${currentDate}")
+							}
+						}
+					}
+
+
+					stage('Application config map deploy')
+					{
+						openshift.withCluster() {
+				            openshift.withProject(namespace) { 
+
+								echo '>>>>>>>>>>Try to creating application config map'
+								def configMapTarget  = readFile("${WORKSPACE}/pipeline/${configMapFile}");
+				            	if(openshift.selector("cm", "${appName}").exists()){
+									echo ">>>>>>Updating application config map";
+									openshift.replace(configMapTarget);
+								}else{
+									echo ">>>>>>Creating application config map";
+									openshift.create(configMapTarget);
+								}
+
+							}
+						}
+					}	
+
+					stage('Provisioning Environment') {
+						openshift.withCluster() {
+							openshift.withProject(namespace) {
+								echo '>>>>>>>>>>Try to creating deployment config'
+								def dc = readFile("${WORKSPACE}/pipeline/${dcfile}")
+											.replace("[[NAMESPACE]]", namespace)
+											.replace("[[REPLICAS]]", replicas)
+											.replace("[[REQ_MEMORY_LIMIT]]", reqMemoryLimit)
+											.replace("[[MEMORY_LIMIT]]", memoryLimit)
+											.replace("[[REQ_CPU_LIMIT]]", reqCpuLimit)
+											.replace("[[CPU_LIMIT]]", cpuLimit)
+										;
+								
+				            	if(openshift.selector("dc", "${appName}").exists()){
+									echo ">>>>>>Updating DC";
+									openshift.replace(dc);
+								}else{
+									echo ">>>>>>Creating DC";
+									openshift.create(dc);
+								}
+							}
+						}	
+					}
+
+					stage('Provisioning Route and Services') {
+						openshift.withCluster() {
+							openshift.withProject(namespace) {
+			
+								//Create HTTP service if not exists
+								if(!openshift.selector("svc", "${appName}").exists()){
+									echo ">>>>>>Provisioning HTTP service"
+									def dcApp = openshift.selector("dc", "${appName}")
+									echo ">>>>>>Exposing app HTTP service"
+									dcApp.expose(" --port=8080 --name=${appName}")
+								}
+				
+								//Create routes if not exists
+								if(!openshift.selector("route", "${appName}-internal").exists()){
+									//create internal route
+									echo ">>>>>>Provisioning HTTPS internal route"
+									openshift.create("route", "edge ${appName}-internal --service=${appName} --hostname=${appName}-${envTag}.151f.gsat-corp.openshiftapps.com --insecure-policy=None");
+								}
+								
+								//create route external if not exists
+								if(!openshift.selector("route", "${appName}-external").exists()){
+									//create external route
+									echo ">>>>>>Provisioning HTTPS route"
+									openshift.create("route", "edge ${appName}-external --service=${appName} --hostname=${appName}-${envTag}.2d1f.gsat-corp.openshiftapps.com --insecure-policy=None");
+									openshift.selector("route", "${appName}-external").label([route: 'external']);
+								}
+							}
+						}
+					}
+
+					stage('Deploying Application') {
+						openshift.withCluster() {
+							openshift.withProject(namespace) {
+								def dc = openshift.selector("dc", "${appName}");
+								def ro = dc.rollout();
+								def result = ro.latest();
+								echo ">>>>>>Operation output: ${result.out}";
+								
+								def latestDeploymentVersion = openshift.selector('dc',"${appName}").object().status.latestVersion;
+								def rc = openshift.selector("rc", "${appName}-${latestDeploymentVersion}")
+								rc.untilEach(1){
+									def rcMap = it.object();
+									return (rcMap.status.replicas.equals(rcMap.status.readyReplicas));
+								}
+							}
+						}
+					}
+				
+                }
+            }    
+        }
+	}
+	
+	post {
+		always {
+			echo 'One way or another, I have finished'
+            deleteDir(); /* clean up our workspace */
+        }
+        success {
+            echo 'I succeeded!'
+        }
+        unstable {
+            echo 'I am unstable :/'
+        }
+        failure {
+            echo 'I failed :('
+        }
+        changed {
+            echo 'Things were different before...'
+        }
+    }
+}

@@ -1,0 +1,26 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  labels:
+    app: troubleshot
+    group: troubleshot
+    project: sandbox-modolo
+  name: troubleshot
+  namespace: sandbox-modolo
+spec:
+  failedBuildsHistoryLimit: 2
+  nodeSelector: null
+  source:
+    binary: {}
+    type: Binary
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial      
+  strategy:
+    type: Docker
+    dockerStrategy: {}
+  output:
+    to:
+      kind: "DockerImage"
+      name: "172.30.186.243:5000/sandbox-modolo/troubleshot"
+  successfulBuildsHistoryLimit: 2
