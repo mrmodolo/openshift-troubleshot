@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-RUN apk add iproute2 rsync vim python3 go py3-pip bash sudo openssh bind-tools
+RUN apk add iproute2 rsync vim python3 go py3-pip bash sudo openssh bind-tools tracepath
 ADD ./something.sh /usr/bin/something.sh
 RUN chmod +x /usr/bin/something.sh
 RUN mkdir -p /opt/troubleshot/bin

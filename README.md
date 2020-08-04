@@ -12,6 +12,7 @@
 - sudo
 - openssh
 - bind-tools
+- tracepath
 
 ## Documentação
 
