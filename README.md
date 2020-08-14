@@ -13,6 +13,9 @@
 - openssh
 - bind-tools
 - iputils
+- busybox-extras
+- less
+- git
 
 ## Documentação
 
@@ -30,4 +33,8 @@
 
 Exemplo: globo-ads-finance-contingency-api
 
+## Comandos
 
+oc start-build troubleshot
+
+oc rollout latest dc/troubleshot
