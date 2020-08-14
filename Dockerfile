@@ -9,6 +9,7 @@ RUN chgrp -R 0 /opt/troubleshot && \
     chmod -R g+rwX /opt/troubleshot
 RUN  chmod +x /opt/troubleshot/bin/*
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/troubleshot/bin
+ENV HOME=/opt/troubleshot
 
 WORKDIR /opt/troubleshot
 
