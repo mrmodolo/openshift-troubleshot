@@ -35,6 +35,6 @@ Exemplo: globo-ads-finance-contingency-api
 
 ## Comandos
 
-oc start-build troubleshot
+oc start-build troubleshot --follow
 
 oc rollout latest dc/troubleshot
