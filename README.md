@@ -38,3 +38,7 @@ Exemplo: globo-ads-finance-contingency-api
 oc start-build troubleshot --follow
 
 oc rollout latest dc/troubleshot
+
+## Alias Para o Shell
+
+alias troubleshot='oc rsh $(oc get pods --field-selector status.phase=Running -l deploymentconfig=troubleshot -n sandbox-modolo --no-headers -o custom-columns=Name:.metadata.name)'
