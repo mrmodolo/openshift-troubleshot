@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-RUN apk add iproute2 rsync vim python3 go py3-pip bash sudo openssh bind-tools iputils
+RUN apk --update add iproute2 rsync vim python3 go py3-pip bash sudo openssh bind-tools iputils git less busybox-extras
 
 ADD ./something.sh /usr/bin/something.sh
 
