@@ -1,8 +1,17 @@
-FROM alpine:latest
+FROM ubuntu:focal
 
-RUN apk --update add iproute2 rsync vim python3 go \
-      py3-pip bash sudo openssh bind-tools \
-      iputils git less busybox-extras tar gzip
+ENV TZ=America/Sao_Paulo
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get -y update && \
+      DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+      apt-utils rsync vim python3 golang nmap unzip \
+      python3-pip ssh bind9-utils \
+      iputils-ping git wget curl \
+      telnet tcptraceroute traceroute netcat \
+      dnsutils iputils-tracepath && \
+      rm -rf /var/lib/apt/lists/*
 
 ADD ./something.sh /usr/bin/something.sh
 
