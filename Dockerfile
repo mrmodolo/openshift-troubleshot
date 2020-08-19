@@ -47,10 +47,12 @@ RUN  chmod +x /opt/troubleshot/bin/*
 
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/troubleshot/bin
 
+RUN unlink /bin/sh && ln -s /usr/bin/bash /bin/sh
+
 ENV HOME=/opt/troubleshot
 
 ENV HISTFILE=/opt/troubleshot/.bash_history
 
 WORKDIR /opt/troubleshot
 
-CMD [ "/bin/bash", "/usr/bin/something.sh" ]
+CMD [ "/usr/bin/bash", "/usr/bin/something.sh" ]
