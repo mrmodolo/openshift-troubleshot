@@ -1,6 +1,8 @@
 FROM alpine:latest
 
-RUN apk --update add iproute2 rsync vim python3 go py3-pip bash sudo openssh bind-tools iputils git less busybox-extras
+RUN apk --update add iproute2 rsync vim python3 go \
+      py3-pip bash sudo openssh bind-tools \
+      iputils git less busybox-extras tar gzip
 
 ADD ./something.sh /usr/bin/something.sh
 
@@ -12,12 +14,12 @@ RUN wget --quiet \
       -O /opt/troubleshot/openshift.tgz
 
 # O segredo para extrair o arquivo sem o aminho é --strip-components 1
-RUN tar -xf openshift.tgz \
+RUN tar -xf /opt/troubleshot/openshift.tgz \
       --strip-components 1 \
       -C /opt/troubleshot/bin/ \
       openshift-origin-server-v3.11.0-0cbc58b-linux-64bit/oc 2>/dev/null
 
-RUN tar -xf openshift.tgz \
+RUN tar -xf /opt/troubleshot/openshift.tgz \
       --strip-components 1 \
       -C /opt/troubleshot/bin/ \
       openshift-origin-server-v3.11.0-0cbc58b-linux-64bit/kubectl 2>/dev/null

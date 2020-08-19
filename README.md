@@ -16,6 +16,9 @@
 - busybox-extras
 - less
 - git
+- tar
+- gzip
+- oc e kubectl
 
 ## Documentação
 
