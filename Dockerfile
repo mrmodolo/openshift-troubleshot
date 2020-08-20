@@ -10,7 +10,7 @@ RUN apt-get -y update && \
       python3-pip ssh bind9-utils \
       iputils-ping git wget curl \
       telnet tcptraceroute traceroute netcat \
-      dnsutils iputils-tracepath && \
+      dnsutils iputils-tracepath iproute2 && \
       rm -rf /var/lib/apt/lists/*
 
 ADD ./something.sh /usr/bin/something.sh

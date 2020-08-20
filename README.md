@@ -19,6 +19,7 @@
 - tar
 - gzip
 - oc e kubectl
+- iproute2
 
 ## Documentação
 
