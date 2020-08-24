@@ -1,5 +1,7 @@
 #!/bin/sh
 
+TERM=xterm
+
 while [ : ]
 do
    clear
