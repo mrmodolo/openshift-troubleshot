@@ -8,9 +8,9 @@ RUN apt-get -y update && \
       DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
       apt-utils rsync vim python3 golang nmap unzip \
       python3-pip ssh bind9-utils \
-      iputils-ping git wget curl \
+      iputils-ping git wget curl fortune cowsay \
       telnet tcptraceroute traceroute netcat \
-      dnsutils iputils-tracepath iproute2 && \
+      dnsutils iputils-tracepath iproute2 less && \
       rm -rf /var/lib/apt/lists/*
 
 ADD ./something.sh /usr/bin/something.sh
