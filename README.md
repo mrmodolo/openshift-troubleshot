@@ -39,6 +39,10 @@ Exemplo: globo-ads-finance-contingency-api
 
 ## Comandos
 
+oc replace -f pipeline/bc-git.yml
+
+oc replace -f pipeline/dc.yml
+
 oc start-build troubleshot --follow
 
 oc rollout latest dc/troubleshot
