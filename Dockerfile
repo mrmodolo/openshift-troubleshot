@@ -1,5 +1,7 @@
 FROM ubuntu:focal
 
+ARG SHADOW
+
 ENV TZ=America/Sao_Paulo
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 ARG DEBIAN_FRONTEND=noninteractive
@@ -13,6 +15,12 @@ RUN apt-get -y update && \
       telnet tcptraceroute traceroute netcat \
       dnsutils iputils-tracepath iproute2 less && \
       rm -rf /var/lib/apt/lists/*
+
+RUN groupadd -g 10000 oc-user                                  
+
+RUN useradd --uid 10000 -g 10000 -G root -m -s /bin/bash -p ${SHADOW} op-user
+
+ADD ./something.sh /usr/bin/something.sh
 
 ADD ./something.sh /usr/bin/something.sh
 
