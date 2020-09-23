@@ -19,7 +19,13 @@ spec:
   runPolicy: Serial      
   strategy:
     type: Docker
-    dockerStrategy: {}
+    dockerStrategy:
+      env:
+        - name: "SHADOW"
+          valueFrom:
+            secretKeyRef:
+              key: passwd
+              name: op-user
   output:
     to:
       kind: "DockerImage"
