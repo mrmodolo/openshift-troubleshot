@@ -1,7 +1,5 @@
 FROM ubuntu:focal
 
-ARG SHADOW
-
 ENV TZ=America/Sao_Paulo
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 ARG DEBIAN_FRONTEND=noninteractive
