@@ -11,7 +11,7 @@ RUN apt-get -y update && \
       iputils-ping git wget curl \
       fortune-mod fortunes fortunes-min cowsay \
       telnet tcptraceroute traceroute netcat \
-      dnsutils iputils-tracepath iproute2 less && \
+      dnsutils iputils-tracepath iproute2 less ldap-utils && \
       rm -rf /var/lib/apt/lists/*
 
 ADD ./something.sh /usr/bin/something.sh
