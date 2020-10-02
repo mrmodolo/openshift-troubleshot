@@ -14,6 +14,10 @@ spec:
         project: sandbox-modolo
         type: application
     spec:
+      hostAliases:
+      - ip: "10.19.189.15"
+        hostnames:
+        - "cyberstation01.andover.com"
       containers:
       - name: troubleshot
         image: 172.30.186.243:5000/sandbox-modolo/troubleshot
