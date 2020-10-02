@@ -20,6 +20,7 @@
 - gzip
 - oc e kubectl
 - iproute2
+- ldap-utils
 
 ## Documentação
 
@@ -42,6 +43,15 @@ Exemplo: globo-ads-finance-contingency-api
 oc start-build troubleshot --follow
 
 oc rollout latest dc/troubleshot
+
+
+## LDAP
+
+https://linux.die.net/man/1/ldapsearch
+
+https://www.linux.com/training-tutorials/managing-ldap-command-line-linux/
+
+
 
 ## Alias Para o Shell
 
