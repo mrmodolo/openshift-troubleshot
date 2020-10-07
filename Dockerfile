@@ -11,7 +11,7 @@ RUN apt-get -y update && \
       iputils-ping git wget curl \
       fortune-mod fortunes fortunes-min cowsay \
       telnet tcptraceroute traceroute netcat \
-      dnsutils iputils-tracepath iproute2 less ldap-utils && \
+      dnsutils iputils-tracepath iproute2 less ldap-utils krb5-user && \
       rm -rf /var/lib/apt/lists/*
 
 RUN groupadd -g 10000 oc-user                                  
@@ -21,6 +21,8 @@ RUN useradd --uid 10000 -g 10000 -G root -m -s /bin/bash -p ${SHADOW} op-user
 ADD ./something.sh /usr/bin/something.sh
 
 ADD ./something.sh /usr/bin/something.sh
+
+ADD ./etc/krb5.conf /etc/krb5.conf
 
 RUN chmod +x /usr/bin/something.sh
 RUN mkdir -p /opt/troubleshot/bin
