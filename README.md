@@ -21,6 +21,13 @@
 - oc e kubectl
 - iproute2
 - ldap-utils
+- krb5-user
+
+## Adicionando configurações kerberos para autenticação no AD
+
+/etc/krb5.conf
+
+kinit
 
 ## Documentação
 
