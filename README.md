@@ -41,6 +41,8 @@ kinit
 
 [Creating a Source-to-Image build pipeline in OKD](https://opensource.com/article/19/5/creating-source-image-build-pipeline-okd)
 
+[Adapting Docker and Kubernetes containers to run on Red Hat OpenShift Container Platform](https://developers.redhat.com/blog/2020/10/26/adapting-docker-and-kubernetes-containers-to-run-on-red-hat-openshift-container-platform/)
+
 ## Pipeline
 
 Exemplo: globo-ads-finance-contingency-api
