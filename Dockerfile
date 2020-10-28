@@ -14,15 +14,16 @@ RUN apt-get -y update && \
       dnsutils iputils-tracepath iproute2 less ldap-utils krb5-user && \
       rm -rf /var/lib/apt/lists/*
 
-RUN groupadd -g 10000 oc-user                                  
+# RUN groupadd -g 10000 oc-user                                  
 
-RUN useradd --uid 10000 -g 10000 -G root -m -s /bin/bash -p ${SHADOW} op-user
-
-ADD ./something.sh /usr/bin/something.sh
+# RUN useradd --uid 10000 -g 10000 -G root -m -s /bin/bash -p ${SHADOW} op-user
 
 ADD ./something.sh /usr/bin/something.sh
 
 ADD ./etc/krb5.conf /etc/krb5.conf
+
+COPY uid_entrypoint /
+RUN chmod g=u /etc/passwd && chmod 775 /uid_entrypoint
 
 RUN chmod +x /usr/bin/something.sh
 RUN mkdir -p /opt/troubleshot/bin
@@ -66,5 +67,7 @@ ENV HOME=/opt/troubleshot
 ENV HISTFILE=/opt/troubleshot/.bash_history
 
 WORKDIR /opt/troubleshot
+
+ENTRYPOINT ["uid_entrypoint"]
 
 CMD [ "/usr/bin/bash", "/usr/bin/something.sh" ]

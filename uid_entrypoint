@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if ! whoami &> /dev/null; then
+  if [ -w /etc/passwd ]; then
+    echo "oc-user:x:$(id -u):0:OpenShift User:${HOME}:/sbin/nologin" >> /etc/passwd
+  fi
+fi
+exec "$@"
