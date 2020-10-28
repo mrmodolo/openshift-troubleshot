@@ -10,7 +10,7 @@ RUN apt-get -y update && \
       python3-pip ssh bind9-utils \
       iputils-ping git wget curl \
       fortune-mod fortunes fortunes-min cowsay \
-      telnet tcptraceroute traceroute netcat \
+      telnet tcptraceroute traceroute netcat openjdk-8-jdk \
       dnsutils iputils-tracepath iproute2 less ldap-utils krb5-user && \
       rm -rf /var/lib/apt/lists/*
 
