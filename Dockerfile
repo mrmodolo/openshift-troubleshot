@@ -24,7 +24,7 @@ ADD ./etc/krb5.conf /etc/krb5.conf
 
 ADD ./uid_entrypoint /usr/bin/uid_entrypoint
 
-RUN chmod g=u /etc/passwd && chmod 775 /usr/bim/uid_entrypoint
+RUN chmod g=u /etc/passwd && chmod 775 /usr/bin/uid_entrypoint
 
 RUN chmod +x /usr/bin/something.sh
 RUN mkdir -p /opt/troubleshot/bin
