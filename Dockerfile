@@ -11,7 +11,7 @@ RUN apt-get -y update && \
       iputils-ping git wget curl \
       fortune-mod fortunes fortunes-min cowsay \
       telnet tcptraceroute traceroute netcat openjdk-8-jdk \
-      dnsutils iputils-tracepath iproute2 less ldap-utils krb5-user && \
+      dnsutils iputils-tracepath iproute2 less ldap-utils krb5-user mtr-tiny && \
       rm -rf /var/lib/apt/lists/*
 
 # RUN groupadd -g 10000 oc-user                                  
