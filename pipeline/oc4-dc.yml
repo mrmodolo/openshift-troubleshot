@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  name: troubleshot
+  labels:
+    app: troubleshot
+    project: sandbox-modolo
+    type: application
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        project: sandbox-modolo
+        type: application
+    spec:
+      hostAliases:
+      - ip: "10.19.189.15"
+        hostnames:
+        - "cyberstation01.andover.com"
+      - ip: "10.72.201.248"
+        hostnames:
+        - "api.ogmaster.local"
+      containers:
+      - name: troubleshot
+        image: 172.30.173.30:5000/sandbox-modolo/troubleshot
+        resources: {}
+        imagePullPolicy: Always
