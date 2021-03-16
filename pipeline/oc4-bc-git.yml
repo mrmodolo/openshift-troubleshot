@@ -23,5 +23,5 @@ spec:
   output:
     to:
       kind: "DockerImage"
-        name: "image-registry.openshift-image-registry.svc:5000/sandbox-modolo/troubleshot"
+      name: "image-registry.openshift-image-registry.svc:5000/sandbox-modolo/troubleshot"
   successfulBuildsHistoryLimit: 2
