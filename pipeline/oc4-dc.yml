@@ -23,6 +23,6 @@ spec:
         - "api.ogmaster.local"
       containers:
       - name: troubleshot
-        image: 172.30.173.30:5000/sandbox-modolo/troubleshot
+        image: image-registry.openshift-image-registry.svc:5000/sandbox-modolo/troubleshot
         resources: {}
         imagePullPolicy: Always
