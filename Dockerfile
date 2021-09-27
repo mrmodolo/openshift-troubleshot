@@ -71,6 +71,9 @@ WORKDIR /opt/troubleshot
 
 RUN touch /opt/troubleshot/.dashrc
 
+RUN chgrp -R 0 /opt/troubleshot/.dashrc && \
+    chmod -R g+rw /opt/troubleshot/.dashrc
+
 ENTRYPOINT ["/usr/bin/uid_entrypoint"]
 
 CMD [ "/usr/bin/bash", "/usr/bin/something.sh" ]
