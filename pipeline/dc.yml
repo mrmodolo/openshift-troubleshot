@@ -26,3 +26,6 @@ spec:
         image: 172.30.186.243:5000/sandbox-modolo/troubleshot
         resources: {}
         imagePullPolicy: Always
+        env:
+        - name: ENV
+          value: "/opt/troubleshot/.dashrc"          

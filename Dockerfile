@@ -69,6 +69,8 @@ ENV HISTFILE=/opt/troubleshot/.bash_history
 
 WORKDIR /opt/troubleshot
 
+RUN touch /opt/troubleshot/.dashrc
+
 ENTRYPOINT ["/usr/bin/uid_entrypoint"]
 
 CMD [ "/usr/bin/bash", "/usr/bin/something.sh" ]
