@@ -1,0 +1,11 @@
+# oc get pods --selector=deploymentconfig=troubleshot --template='{{range .items}}{{.status.hostIP}}{{end}}{{""}}'
+
+node_ip() {
+        if [ -z $NODE_IP ]
+        then
+                NODE_IP=$(oc get pods --selector=deploymentconfig=troubleshot --template='{{range .items}}{{.status.hostIP}}{{end}}{{""}}')
+        fi
+        PS1="NodeIP: ${NODE_IP}  >"
+}
+
+PROMPT_COMMAND='node_ip'

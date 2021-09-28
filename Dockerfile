@@ -69,7 +69,7 @@ ENV HISTFILE=/opt/troubleshot/.bash_history
 
 WORKDIR /opt/troubleshot
 
-RUN touch /opt/troubleshot/.dashrc
+COPY ./prompt/dashrc /opt/troubleshot/.dashrc
 
 RUN chgrp -R 0 /opt/troubleshot/.dashrc && \
     chmod -R g+rw /opt/troubleshot/.dashrc
