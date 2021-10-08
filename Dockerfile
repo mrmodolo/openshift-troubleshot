@@ -73,7 +73,7 @@ COPY ./testes /opt/troubleshot/
 
 COPY ./prompt/dashrc /opt/troubleshot/.dashrc
 
-RUN wget 'https://download.oracle.com/otn_software/java/sqldeveloper/sqlcl-21.3.0.278.1045.zip -O /tmp/sqlcl.zip' && \
+RUN wget --quiet -c 'https://download.oracle.com/otn_software/java/sqldeveloper/sqlcl-21.3.0.278.1045.zip' -O /tmp/sqlcl.zip && \
   unzip /tmp/sqlcl.zip -d /opt/troubleshot && rm -f /tmp/sqlcl.zip 
 
 RUN chgrp -R 0 /opt/troubleshot/.dashrc && \
