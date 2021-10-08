@@ -1,0 +1,79 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  creationTimestamp: "2021-03-16T00:09:37Z"
+  generation: 4
+  labels:
+    app: troubleshot
+    project: sandbox-modolo
+    type: application
+  name: troubleshot
+  namespace: sandbox-modolo
+spec:
+  replicas: 1
+  selector:
+    project: sandbox-modolo
+    type: application
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        project: sandbox-modolo
+        type: application
+    spec:
+      containers:
+      - image: image-registry.openshift-image-registry.svc:5000/sandbox-modolo/troubleshot
+        imagePullPolicy: Always
+        name: troubleshot
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      hostAliases:
+      - hostnames:
+        - cyberstation01.andover.com
+        ip: 10.19.189.15
+      - hostnames:
+        - api.ogmaster.local
+        ip: 10.72.201.248
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  test: false
+  triggers:
+  - type: ConfigChange
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2021-03-16T21:13:06Z"
+    lastUpdateTime: "2021-03-16T21:13:06Z"
+    message: replication controller "troubleshot-4" successfully rolled out
+    reason: NewReplicationControllerAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2021-09-20T12:35:16Z"
+    lastUpdateTime: "2021-09-20T12:35:16Z"
+    message: Deployment config has minimum availability.
+    status: "True"
+    type: Available
+  details:
+    causes:
+    - type: ConfigChange
+    message: config change
+  latestVersion: 4
+  observedGeneration: 4
+  readyReplicas: 1
+  replicas: 1
+  unavailableReplicas: 0
+  updatedReplicas: 1
