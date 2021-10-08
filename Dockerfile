@@ -69,16 +69,17 @@ ENV HISTFILE=/opt/troubleshot/.bash_history
 
 WORKDIR /opt/troubleshot
 
+COPY ./testes /opt/troubleshot/
+
 COPY ./prompt/dashrc /opt/troubleshot/.dashrc
 
-RUN chgrp -R 0 /opt/troubleshot/.dashrc && \
-    chmod -R g+rw /opt/troubleshot/.dashrc
-
 RUN wget 'https://download.oracle.com/otn_software/java/sqldeveloper/sqlcl-21.3.0.278.1045.zip -O /tmp/sqlcl.zip' && \
-  unzip /tmp/sqlcl.zip -d /opt/troubleshot && \
-  rm -f /tmp/sqlcl.zip && \
-  chgrp -R 0 /opt/troubleshot/sqlcl && \
-  chmod -R g+x /opt/troubleshot/sqlcl/bin/&
+  unzip /tmp/sqlcl.zip -d /opt/troubleshot && rm -f /tmp/sqlcl.zip 
+
+RUN chgrp -R 0 /opt/troubleshot/.dashrc && \
+    chmod -R g+rw /opt/troubleshot/.dashrc && \
+    chmod -R g+x /opt/troubleshot/sqlcl/bin
+
 
 ENTRYPOINT ["/usr/bin/uid_entrypoint"]
 
