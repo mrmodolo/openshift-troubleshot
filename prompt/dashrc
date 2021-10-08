@@ -5,7 +5,7 @@ node_ip() {
         then
                 NODE_IP=$(oc get pods --selector=deploymentconfig=troubleshot --template='{{range .items}}{{.status.hostIP}}{{end}}{{""}}')
         fi
-        PS1="NodeIP: ${NODE_IP} > "
+        PS1="Origem: ${NODE_IP} > "
 }
 
 PROMPT_COMMAND='node_ip'
