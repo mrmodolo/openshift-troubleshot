@@ -11,7 +11,7 @@ RUN apt-get -y update && \
       iputils-ping git wget curl \
       fortune-mod fortunes fortunes-min cowsay \
       telnet tcptraceroute traceroute netcat openjdk-8-jdk \
-      dnsutils iputils-tracepath iproute2 less ldap-utils krb5-user mtr-tiny lftp && \
+      dnsutils iputils-tracepath iproute2 less ldap-utils krb5-user mtr-tiny lftp libaio1 && \
       rm -rf /var/lib/apt/lists/*
 
 # RUN groupadd -g 10000 oc-user                                  
@@ -76,10 +76,14 @@ COPY ./prompt/dashrc /opt/troubleshot/.dashrc
 RUN wget -c 'https://download.oracle.com/otn_software/java/sqldeveloper/sqlcl-21.3.0.278.1045.zip' -O /tmp/sqlcl.zip && \
   unzip /tmp/sqlcl.zip -d /opt/troubleshot && rm -f /tmp/sqlcl.zip 
 
+RUN wget -c 'https://download.oracle.com/otn_software/linux/instantclient/214000/instantclient-basic-linux.x64-21.4.0.0.0dbru.zip' -O /tmp/instantclient.zip && \
+  unzip /tmp/instantclient.zip -d /opt/troubleshot && rm -f /tmp/instantclient.zip
+
 RUN chgrp -R 0 /opt/troubleshot/.dashrc && \
     chmod -R g+rw /opt/troubleshot/.dashrc && \
     chmod -R g+x /opt/troubleshot/sqlcl/bin
 
+ENV LD_LIBRARY_PATH="/opt/troubleshot/instantclient_21_4"
 
 ENTRYPOINT ["/usr/bin/uid_entrypoint"]
 
